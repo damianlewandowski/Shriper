@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/login")({
@@ -13,7 +14,7 @@ function RouteComponent() {
   return (
     <div>
       Hello "/login"!
-      <button onClick={handleLogin}>Login with Google</button>
+      <Button onClick={handleLogin}>Login with Google</Button>
     </div>
   );
 }
