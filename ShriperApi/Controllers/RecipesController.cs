@@ -14,7 +14,6 @@ public class RecipesController(PostgresDbContext context) : ControllerBase
   private readonly PostgresDbContext _context = context;
 
   [HttpGet]
-  [Authorize]
   public ActionResult<IEnumerable<Recipe>> GetRecipes()
   {
     return _context.Recipes.ToList();
@@ -34,6 +33,7 @@ public class RecipesController(PostgresDbContext context) : ControllerBase
   }
 
   [HttpPost]
+  [Authorize]
   public ActionResult<Recipe> CreateRecipe(CreateRecipeDto createRecipeDto)
   {
     if (createRecipeDto == null)

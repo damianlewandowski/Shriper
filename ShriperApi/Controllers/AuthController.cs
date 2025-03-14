@@ -1,14 +1,21 @@
+using System.Diagnostics;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using ShriperApi.Data;
+using ShriperApi.Models;
 
 namespace ShriperApi.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AuthController : ControllerBase
+public class AuthController(PostgresDbContext context) : ControllerBase
 {
+  private readonly PostgresDbContext _context = context;
+
   [HttpGet("google-login")]
   public IActionResult GoogleLogin()
   {
@@ -30,7 +37,34 @@ public class AuthController : ControllerBase
       return BadRequest("Google authentication failed");
     }
 
-    return Redirect("http://localhost:3001"); // Or RedirectToAction("SecureEndpoint", "YourController");
+    var claimsPrincipal = authenticationResult.Principal;
+
+    Debug.WriteLine("--- Google Claims ---"); // Output to debug console
+
+    var googleId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+    var email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
+    var profilePictureUrl = claimsPrincipal.FindFirstValue("urn:google:picture");
+
+    if (string.IsNullOrEmpty(googleId) || string.IsNullOrEmpty(email))
+    {
+      return BadRequest("Couldn't retrieve essential user information.");
+    }
+
+    var existingUser = await _context.Users.SingleOrDefaultAsync(user => user.GoogleId == googleId);
+    if (existingUser == null)
+    {
+      var newUser = new User
+      {
+        GoogleId = googleId,
+        Email = email,
+        ProfilePictureUrl = profilePictureUrl
+      };
+
+      _context.Users.Add(newUser);
+      await _context.SaveChangesAsync();
+    }
+
+    return Redirect("http://localhost:3001");
   }
 
   [HttpGet("logout")]
