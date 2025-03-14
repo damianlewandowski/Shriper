@@ -39,8 +39,6 @@ public class AuthController(PostgresDbContext context) : ControllerBase
 
     var claimsPrincipal = authenticationResult.Principal;
 
-    Debug.WriteLine("--- Google Claims ---"); // Output to debug console
-
     var googleId = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
     var email = claimsPrincipal.FindFirstValue(ClaimTypes.Email);
     var profilePictureUrl = claimsPrincipal.FindFirstValue("urn:google:picture");
@@ -64,7 +62,7 @@ public class AuthController(PostgresDbContext context) : ControllerBase
       await _context.SaveChangesAsync();
     }
 
-    return Redirect("http://localhost:3001");
+    return Redirect("http://localhost:3000");
   }
 
   [HttpGet("logout")]
