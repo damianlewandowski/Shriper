@@ -4,11 +4,12 @@ namespace ShriperApi.Models;
 
 public class Ingredient : BaseModel
 {
+  [Required]
   public int Id { get; set; }
 
-  [Required(ErrorMessage = "Name is required.")]
+  [Required]
   public string Name { get; set; } = "";
 
-  [Required(ErrorMessage = "Ingredient amount is required.")]
+  [Required]
   public string Amount { get; set; } = "";
 }

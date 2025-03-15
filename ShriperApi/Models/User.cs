@@ -4,6 +4,7 @@ namespace ShriperApi.Models;
 
 public class User : BaseModel
 {
+  [Required]
   public int Id { get; set; }
 
   [Required]

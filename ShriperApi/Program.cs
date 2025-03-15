@@ -22,6 +22,8 @@ builder.Services.AddDbContext<PostgresDbContext>(options => options.UseNpgsql(bu
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddOpenApiDocument();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -48,6 +50,7 @@ app.UseCors("ReactAppPolicy");
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
+    app.UseOpenApi();
     app.UseSwaggerUI();
 }
 
