@@ -1,9 +1,5 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShriperApi.Data;
-using ShriperApi.Dtos;
-using ShriperApi.Models;
 
 namespace ShriperApi.controllers;
 
@@ -14,21 +10,37 @@ public class UsersController(PostgresDbContext context) : ControllerBase
   private readonly PostgresDbContext _context = context;
 
   [HttpGet]
-  public ActionResult<IEnumerable<User>> GetUsers()
+  public ActionResult<IEnumerable<UserDto>> GetUsers()
   {
-    return _context.Users.ToList();
+    return _context.Users.Select(user => new UserDto
+    {
+      Id = user.Id,
+      Email = user.Email,
+      ProfilePictureUrl = user.ProfilePictureUrl,
+      CreatedAt = user.CreatedAt,
+      UpdatedAt = user.UpdatedAt,
+    }).ToList();
   }
 
   [HttpGet("{id}")]
-  public ActionResult<User> GetUser(int id)
+  public ActionResult<UserDto> GetUser(int id)
   {
-    var recipe = _context.Users.Find(id);
+    var user = _context.Users.Find(id);
 
-    if (recipe == null)
+    if (user == null)
     {
       return NotFound();
     }
 
-    return recipe;
+    var userDto = new UserDto
+    {
+      Id = user.Id,
+      Email = user.Email,
+      ProfilePictureUrl = user.ProfilePictureUrl,
+      CreatedAt = user.CreatedAt,
+      UpdatedAt = user.UpdatedAt,
+    };
+
+    return userDto;
   }
 }

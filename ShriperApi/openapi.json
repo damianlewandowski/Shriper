@@ -105,7 +105,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/UserDto"
                   }
                 }
               }
@@ -138,7 +138,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/UserDto"
                 }
               }
             }
@@ -146,7 +146,7 @@
         }
       }
     },
-    "/Auth/google-login": {
+    "/api/Auth/google-login": {
       "get": {
         "tags": [
           "Auth"
@@ -167,7 +167,7 @@
         }
       }
     },
-    "/Auth/google-callback": {
+    "/api/Auth/google-callback": {
       "get": {
         "tags": [
           "Auth"
@@ -188,8 +188,28 @@
         }
       }
     },
-    "/Auth/logout": {
+    "/api/Auth/me": {
       "get": {
+        "tags": [
+          "Auth"
+        ],
+        "operationId": "Auth_GetMe",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/logout": {
+      "post": {
         "tags": [
           "Auth"
         ],
@@ -336,7 +356,7 @@
           }
         }
       },
-      "User": {
+      "UserDto": {
         "allOf": [
           {
             "$ref": "#/components/schemas/BaseModel"
@@ -346,17 +366,12 @@
             "additionalProperties": false,
             "required": [
               "id",
-              "googleId",
               "email"
             ],
             "properties": {
               "id": {
                 "type": "integer",
                 "format": "int32"
-              },
-              "googleId": {
-                "type": "string",
-                "minLength": 1
               },
               "email": {
                 "type": "string",

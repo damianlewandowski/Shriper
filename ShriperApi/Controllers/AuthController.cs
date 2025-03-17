@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShriperApi.Data;
@@ -11,7 +12,7 @@ using ShriperApi.Models;
 namespace ShriperApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class AuthController(PostgresDbContext context) : ControllerBase
 {
   private readonly PostgresDbContext _context = context;
@@ -65,10 +66,35 @@ public class AuthController(PostgresDbContext context) : ControllerBase
     return Redirect("http://localhost:3000");
   }
 
-  [HttpGet("logout")]
+  [Authorize]
+  [HttpGet("me")]
+  public async Task<ActionResult<UserDto>> GetMe()
+  {
+    var googleIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+    var currentUser = await _context.Users.SingleOrDefaultAsync(user => user.GoogleId == googleIdClaim);
+
+    if (currentUser == null)
+    {
+      return NotFound("User not found.");
+    }
+
+    var userDto = new UserDto
+    {
+      Id = currentUser.Id,
+      Email = currentUser.Email,
+      ProfilePictureUrl = currentUser.ProfilePictureUrl,
+      CreatedAt = currentUser.CreatedAt,
+      UpdatedAt = currentUser.UpdatedAt,
+    };
+
+    return userDto;
+  }
+
+  [HttpPost("logout")]
   public async Task<IActionResult> Logout()
   {
     await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    return Ok("Logged out"); // Or RedirectToAction("Index", "Home");
+    return Ok("Logged out");
   }
 }
