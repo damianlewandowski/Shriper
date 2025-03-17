@@ -1,16 +1,16 @@
 import axios, { type AxiosInstance } from "axios";
+import constants from "./constants";
 
 // TODO: add prod env
-const baseURL = import.meta.env.VITE_API_BASE_URL; // Or whatever your environment variable is named
 
-if (!baseURL) {
+if (!constants.BASE_URL) {
   throw new Error(
     "REACT_APP_API_BASE_URL environment variable is not defined."
   );
 }
 
 const instance: AxiosInstance = axios.create({
-  baseURL,
+  baseURL: constants.BASE_URL,
   withCredentials: true,
 });
 

@@ -36,9 +36,8 @@ export interface CreateRecipeDto {
     vitalInstructions?: string;
 }
 
-export interface User extends BaseModel {
+export interface UserDto extends BaseModel {
     id: number;
-    googleId: string;
     email: string;
     profilePictureUrl?: string | undefined;
 }

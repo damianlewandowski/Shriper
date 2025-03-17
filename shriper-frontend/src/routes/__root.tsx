@@ -1,12 +1,12 @@
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
-import Header from "../components/Header";
+import Navbar from "../components/Navbar";
 
 export const Route = createRootRoute({
   component: () => (
     <>
-      <Header />
+      <Navbar />
 
       <Outlet />
       <TanStackRouterDevtools />
