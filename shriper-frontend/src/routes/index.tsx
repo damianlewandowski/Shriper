@@ -1,7 +1,5 @@
+import Recipes from "@/features/recipes/Recipes";
 import { createFileRoute } from "@tanstack/react-router";
-import logo from "../logo.svg";
-import { useGetRecipesQuery } from "@/features/recipes/api";
-import RecipesList from "@/features/recipes/RecipesList";
 
 export const Route = createFileRoute("/")({
   component: App,
@@ -10,7 +8,7 @@ export const Route = createFileRoute("/")({
 function App() {
   return (
     <div className="text-center">
-      <RecipesList />
+      <Recipes />
     </div>
   );
 }

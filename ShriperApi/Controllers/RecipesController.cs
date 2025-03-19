@@ -6,6 +6,20 @@ using ShriperApi.Models;
 
 namespace ShriperApi.controllers;
 
+public class CreateIngredientDtoValidationError
+{
+  public List<string> Name { get; set; } = [];
+  public List<string> Amount { get; set; } = [];
+}
+
+public class CreateRecipeValidationErrorResponse
+{
+  public List<string> Title { get; set; } = [];
+  public List<CreateIngredientDtoValidationError> Ingredients { get; set; } = [];
+  public List<string> Instructions { get; set; } = [];
+  public List<string> VitalInstructions { get; set; } = [];
+}
+
 [Route("api/[controller]")]
 [ApiController]
 public class RecipesController(PostgresDbContext context) : ControllerBase
@@ -33,7 +47,8 @@ public class RecipesController(PostgresDbContext context) : ControllerBase
 
   [HttpPost]
   [Authorize]
-  public ActionResult<Recipe> CreateRecipe(CreateRecipeDto createRecipeDto)
+  [ProducesResponseType(typeof(CreateRecipeValidationErrorResponse), StatusCodes.Status400BadRequest)]
+  public ActionResult<Recipe> CreateRecipe([FromBody] CreateRecipeDto createRecipeDto)
   {
     if (createRecipeDto == null)
     {
@@ -43,7 +58,12 @@ public class RecipesController(PostgresDbContext context) : ControllerBase
     var recipe = new Recipe
     {
       Title = createRecipeDto.Title,
-      Ingredients = createRecipeDto.Ingredients,
+      Ingredients = createRecipeDto.Ingredients.Select(ingredientDto => new Ingredient
+      {
+        Name = ingredientDto.Name,
+        Amount = ingredientDto.Amount
+      }
+      ).ToList(),
       Instructions = createRecipeDto.Instructions
     };
 

@@ -8,7 +8,9 @@ export const Route = createRootRoute({
     <>
       <Navbar />
 
-      <Outlet />
+      <div className="p-4">
+        <Outlet />
+      </div>
       <TanStackRouterDevtools />
     </>
   ),

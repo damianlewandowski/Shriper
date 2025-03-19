@@ -26,12 +26,6 @@ export const useLogoutMutation = () => {
   return useMutation({
     mutationFn: async () => {
       const response = await logout();
-      // if (!response.ok) {
-      // throw new Error("Logout failed");
-      // const errorData = await response.json();
-      // throw new Error(errorData?.message || "Logout failed");
-      // }
-      // return response.json(); // Or response.text() if your backend returns plain text
       return response;
     },
     onSuccess: () => {

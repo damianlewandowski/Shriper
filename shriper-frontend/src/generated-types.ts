@@ -29,11 +29,28 @@ export interface Ingredient extends BaseModel {
     amount: string;
 }
 
+export interface CreateRecipeValidationErrorResponse {
+    title?: string[];
+    ingredients?: CreateIngredientDtoValidationError[];
+    instructions?: string[];
+    vitalInstructions?: string[];
+}
+
+export interface CreateIngredientDtoValidationError {
+    name?: string[];
+    amount?: string[];
+}
+
 export interface CreateRecipeDto {
     title: string;
-    ingredients: Ingredient[];
+    ingredients: CreateIngredientDto[];
     instructions: string;
     vitalInstructions?: string;
+}
+
+export interface CreateIngredientDto {
+    name: string;
+    amount: string;
 }
 
 export interface UserDto extends BaseModel {

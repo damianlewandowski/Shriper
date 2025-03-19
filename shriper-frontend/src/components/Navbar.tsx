@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import constants from "@/constants";
 import { useGetMeQuery } from "@/features/auth/api";
 import LoggedInSection from "@/features/auth/LoggedInSection";
+import { Link } from "@tanstack/react-router";
 
 function NotLoggedInSection() {
   function handleLogin() {
@@ -21,11 +22,9 @@ function Navbar() {
 
   return (
     <div className="bg-secondary border-b border-border h-16 flex items-center justify-between px-4 md:px-6">
-      <div className="font-bold text-lg">Shriper</div>
-
-      <div className="flex-grow mx-4 md:mx-6 md:max-w-80">
-        <Input type="text" placeholder="Search..." />
-      </div>
+      <Link to="/">
+        <div className="font-bold text-lg">Shriper</div>
+      </Link>
 
       {me ? <LoggedInSection me={me} /> : <NotLoggedInSection />}
     </div>
